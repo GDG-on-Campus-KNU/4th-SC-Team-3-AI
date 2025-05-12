@@ -3,6 +3,7 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from typing import List
+from app.exceptions.gemini_exception import GeminiException
 from app.schemas.prompt_schema import AnalysisResult, ImageGenerationPrompt
 from google.genai.errors import APIError
 from dotenv import load_dotenv
@@ -17,8 +18,8 @@ client = genai.Client(api_key=os.getenv('API_KEY'))
 def format_scene_description(payload: List[ImageGenerationPrompt]) -> str:
     json_data = json.dumps([item.model_dump() for item in payload], ensure_ascii=False, indent=2)
     prompt = (
-        "다음 JSON을 분석해서 사진을 생성해주세요.\n"
-        "사진을 생성할 때, 프롬프트가 사진 내에 포함되지 않도록 주의해주세요.\n"
+        "다음 JSON을 분석해서, 해당 JSON이 묘사하는 사진을 생성해주세요.\n"
+        "사진에는 어떤 텍스트도 포함되지 않아야 합니다. 프롬프트가 사진 내에 포함되지 않도록 주의해주세요.\n"
         "분석할 JSON:\n"
         f"{json_data}"
     )
@@ -37,15 +38,15 @@ def generate_image_from_gemini(data: List[ImageGenerationPrompt]) -> bytes:
             config=types.GenerateContentConfig(response_modalities=["Text", "Image"])
         )
     except APIError as e:
-        raise Exception("이미지 생성 실패: " + e.message)
+        raise GeminiException(e.status, "이미지 생성 실패: " + e.message)
     
     if not response.candidates:
-        raise Exception("이미지 생성 실패: Gemini 응답에 후보가 없습니다.")
+        raise GeminiException(500, "이미지 생성 실패: Gemini 응답에 후보가 없습니다.")
 
     # 첫 번째 후보에서 이미지 데이터 찾기
     candidate = response.candidates[0]
     if not candidate.content.parts:
-        raise Exception("이미지 생성 실패: Gemini 응답에 이미지가 없습니다.")
+        raise GeminiException(500, "이미지 생성 실패: Gemini 응답에 이미지가 없습니다.")
 
     # 🎨 이미지 추출
     for part in response.candidates[0].content.parts:
@@ -82,9 +83,9 @@ def analyze_with_gemini(text: str) -> dict:
             )
         )
     except APIError as e:
-        raise Exception("카테고리 분석 실패: " + e.message)
+        raise GeminiException(e.status, "카테고리 분석 실패: " + e.message)
 
     if not response.text:
-        raise Exception("카테고리 분석 실패: Gemini 응답에 카테고리 분석 결과가 없습니다.")
+        raise GeminiException(500, "카테고리 분석 실패: Gemini 응답에 카테고리 분석 결과가 없습니다.")
     
     return json.loads(response.text)

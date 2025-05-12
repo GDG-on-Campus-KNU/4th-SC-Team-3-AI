@@ -9,4 +9,3 @@ router = APIRouter()
 async def generate_image(payload: List[ImageGenerationPrompt]):
     image_bytes = generate_image_from_gemini(payload)
     return Response(content=image_bytes, media_type="image/png")
-
