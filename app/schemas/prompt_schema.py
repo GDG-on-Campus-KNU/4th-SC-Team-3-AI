@@ -27,8 +27,8 @@ ImageGenerationPrompt = Union[
 ]
 
 class AnalysisResult(BaseModel):
-    subject: str
-    action: str
+    subject: List[str]
+    action: List[str]
     visual_elements: List[str]
     auditory_elements: List[str]
     environment: List[str]
