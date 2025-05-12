@@ -7,6 +7,6 @@ services:
     env_file:
       - .env
     ports:
-      - ${PORT}:${PORT}
+      - 80:${PORT}
     restart: always
     image: ${DOCKER_IMAGE}:latest
