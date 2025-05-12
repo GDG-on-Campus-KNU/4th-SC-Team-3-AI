@@ -2,11 +2,6 @@
 fastapi
 uvicorn[standard]
 
-# Transformer 모델 관련
-transformers>=4.30.0
-torch>=2.0.0
-sentencepiece
-
 # Google Gemini API
 google-ai-generativelanguage==0.6.15
 google-api-core==2.24.2
@@ -21,4 +16,3 @@ httplib2
 # 기타 의존성
 pillow
 requests
-
