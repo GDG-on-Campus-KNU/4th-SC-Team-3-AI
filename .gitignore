@@ -1,0 +1,44 @@
+# Python bytecode
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.pdb
+*.log
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# FastAPI specific
+*.db
+*.sqlite3
+migrations/
+
+# Environment variables
+.env
+
+# IDE/editor specific files
+.idea/
+.vscode/
+*.swp
+
+# mypy (type checker)
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# Pytest
+.cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Build and distribution files
+build/
+dist/
+*.egg-info/
+
+# PyInstaller
+*.spec
