@@ -6,6 +6,4 @@ router = APIRouter()
 
 @router.post("/analyze")
 async def analyze(request: TextImageGenerationPrompt):
-    parsed = analyze_with_gemini(request.content)
-    return parsed
-
+    return analyze_with_gemini(request.content)

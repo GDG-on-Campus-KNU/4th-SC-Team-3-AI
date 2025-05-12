@@ -68,6 +68,9 @@ def analyze_prompt(text: str) -> str:
     )
     return prompt
 
+def prettify_key(key: str) -> str:
+    return " ".join(word.capitalize() for word in key.split("_"))
+
 def analyze_with_gemini(text: str) -> dict:
     prompt = analyze_prompt(text)
 
@@ -88,4 +91,5 @@ def analyze_with_gemini(text: str) -> dict:
     if not response.text:
         raise GeminiException(500, "카테고리 분석 실패: Gemini 응답에 카테고리 분석 결과가 없습니다.")
     
-    return json.loads(response.text)
+    result = json.loads(response.text)
+    return [{"key": prettify_key(key), "value": value} for key, value in result.items() if value ]
