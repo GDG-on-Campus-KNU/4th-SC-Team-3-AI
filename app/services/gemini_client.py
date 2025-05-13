@@ -13,7 +13,7 @@ import json
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv('API_KEY'))
+client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 def format_scene_description(payload: List[ImageGenerationPrompt]) -> str:
     json_data = json.dumps([item.model_dump() for item in payload], ensure_ascii=False, indent=2)
